@@ -24,7 +24,6 @@ This guide provides step-by-step instructions to set up a 3-tier architecture on
 - **AWS Account:** Ensure you have an active AWS account with appropriate permissions to create and manage VPCs, subnets, EC2 instances, RDS databases, and other AWS resources.
 - **AWS CLI:** Install and configure the AWS Command Line Interface (CLI) for managing AWS services.
 - **GitHub Account:** Set up a GitHub account to store and version-control your infrastructure code and configurations.
-- **Terraform (Optional):** For infrastructure as code, consider using Terraform to define and provision AWS resources. [Learn more about Terraform](https://www.terraform.io/).
 
 ## Setting Up the Infrastructure
 
