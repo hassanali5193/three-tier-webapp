@@ -106,10 +106,6 @@ This guide provides step-by-step instructions to set up a 3-tier architecture on
        - Enable "Auto-assign public IP."
      - In "Advanced Details," add user data to install and start the Apache web server.
 
-## Deploying the Tiers (Continued)
-
-### Web Tier (Continued)
-
 2. **Launch Web Tier EC2 Instances:**
    - Navigate to the EC2 dashboard and click "Instances" > "Launch Instance."
    - Choose "Launch Instance from Template."
