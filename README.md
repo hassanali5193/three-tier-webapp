@@ -1,176 +1,140 @@
-# three-tier-webapp
+# AWS 3-Tier Architecture Web App
 
-# AWS 3-Tier Architecture Setup Guide
+This repository demonstrates the setup of a **3-tier architecture** for a **web application** on **AWS**. The architecture includes the **Web Tier**, **Application Tier**, and **Database Tier**, following best practices for scalability, security, and performance.
 
-This guide provides step-by-step instructions to set up a 3-tier architecture on AWS, comprising the Web Tier, Application Tier, and Database Tier. Each tier is designed to be scalable and secure, following AWS best practices.
+## Key Features
 
-## Table of Contents
+- **End-to-End Deployment**: A fully functional example of a 3-tier web application setup with AWS services like **EC2**, **RDS**, **VPC**, **Auto Scaling**, **Load Balancing**, and more.
+- **Scalable**: The setup is designed to be scalable for both small and large traffic loads.
+- **Secure**: Follows security best practices, including private subnets, secure EC2 instances, and IAM roles.
+- **Highly Available**: Designed for availability with features such as multiple subnets, load balancing, and fault tolerance.
+- **Infrastructure Setup**: Uses AWS native services for the setup, without the need for tools like Terraform or Docker.
 
-1. [Prerequisites](#prerequisites)
-2. [Setting Up the Infrastructure](#setting-up-the-infrastructure)
-   - [Create a Virtual Private Cloud (VPC)](#create-a-virtual-private-cloud-vpc)
-   - [Set Up Subnets](#set-up-subnets)
-   - [Create an Internet Gateway](#create-an-internet-gateway)
-   - [Set Up a NAT Gateway](#set-up-a-nat-gateway)
-   - [Configure Route Tables](#configure-route-tables)
-3. [Deploying the Tiers](#deploying-the-tiers)
-   - [Web Tier](#web-tier)
-   - [Application Tier](#application-tier)
-   - [Database Tier](#database-tier)
-4. [Verifying Connectivity](#verifying-connectivity)
+## Platforms
 
-## Prerequisites
+- **AWS** (EC2, RDS, VPC, Load Balancer, Auto Scaling, Security Groups, Subnets, NAT Gateway)
 
-- **AWS Account:** Ensure you have an active AWS account with appropriate permissions to create and manage VPCs, subnets, EC2 instances, RDS databases, and other AWS resources.
-- **AWS CLI:** Install and configure the AWS Command Line Interface (CLI) for managing AWS services.
-- **GitHub Account:** Set up a GitHub account to store and version-control your infrastructure code and configurations.
+[![Build Status](https://img.shields.io/github/workflow/status/yourusername/repositoryname/CI)](https://github.com/yourusername/repositoryname)
+[![Code Coverage](https://codecov.io/gh/yourusername/repositoryname/branch/main/graph/badge.svg)](https://codecov.io/gh/yourusername/repositoryname)
 
-## Setting Up the Infrastructure
+## Diagram
 
-### Create a Virtual Private Cloud (VPC)
+![AWS 3-Tier Architecture](https://yourimageurl.com/aws-3-tier-architecture.png)
 
-1. **Navigate to VPC Dashboard:**
-   - Log in to the AWS Management Console.
-   - Go to the VPC dashboard.
+## Architecture Overview
 
-2. **Create VPC:**
-   - Click on "Create VPC."
-   - Choose "VPC only."
-   - Name your VPC (e.g., `MyVPC`).
-   - Set the IPv4 CIDR block to `10.10.0.0/16`.
-   - Click "Create VPC."
+### Presentation Layer (Web Tier)
 
-### Set Up Subnets
+The **Web Tier** consists of the **EC2 instances** running the web server (Apache/Nginx) and hosting the frontend of the application. This tier communicates with the **Application Tier** via HTTP and serves static and dynamic content to the client.
 
-1. **Navigate to Subnets:**
-   - In the VPC dashboard, click on "Subnets."
+### Business Logic Layer (Application Tier)
 
-2. **Create Subnets:**
-   - Click "Create subnet."
-   - Select your VPC.
-   - Create 2 public subnets for the Web Tier and 4 private subnets (2 each for Application and Database Tiers).
-   - Assign appropriate CIDR blocks (e.g., `10.10.1.0/24` for the first public subnet).
-   - Enable "Auto-assign public IPv4 address" for public subnets.
+The **Application Tier** is where the business logic resides, typically running on EC2 instances or AWS Lambda (for serverless applications). It interacts with the **Database Tier** and processes client requests.
 
-### Create an Internet Gateway
+### Data Layer (Database Tier)
 
-1. **Navigate to Internet Gateways:**
-   - In the VPC dashboard, click on "Internet Gateways."
+The **Database Tier** utilizes **Amazon RDS** or **Amazon Aurora** for relational databases. It handles data storage, retrieval, and manipulation and communicates directly with the Application Tier.
 
-2. **Create and Attach Internet Gateway:**
-   - Click "Create Internet Gateway."
-   - Name it (e.g., `MyInternetGateway`).
-   - Click "Create."
-   - Select the new Internet Gateway, click "Actions," then "Attach to VPC."
-   - Choose your VPC and click "Attach Internet Gateway."
+---
 
-### Set Up a NAT Gateway
+## Setup Guide
 
-1. **Navigate to NAT Gateways:**
-   - In the VPC dashboard, click on "NAT Gateways."
+### Prerequisites
 
-2. **Create NAT Gateway:**
-   - Click "Create NAT Gateway."
-   - Name it (e.g., `MyNATGateway`).
-   - Select a public subnet.
-   - Allocate an Elastic IP.
-   - Click "Create NAT Gateway."
+- **AWS Account**: Ensure you have an active AWS account with appropriate permissions to create and manage VPCs, EC2 instances, RDS databases, etc.
+- **AWS CLI**: Install and configure the AWS Command Line Interface (CLI) for managing AWS services.
 
-### Configure Route Tables
+### Setting Up Infrastructure
 
-1. **Public Route Table:**
-   - In the VPC dashboard, click on "Route Tables."
-   - Create a new route table for public subnets.
-   - Associate it with the public subnets.
-   - Add a route: Destination `0.0.0.0/0`, Target "Internet Gateway."
+1. **Clone the Repository:**
 
-2. **Private Route Table:**
-   - Create a new route table for private subnets.
-   - Associate it with the private subnets.
-   - Add a route: Destination `0.0.0.0/0`, Target "NAT Gateway."
+   ```bash
+   git clone https://github.com/yourusername/repositoryname.git
+   cd repositoryname
 
-## Deploying the Tiers
+2. **Provision Resources:**
 
-### Web Tier
+   Follow the AWS console or CLI to manually provision the following resources:
+   
+   - **VPC**: Create a custom VPC with appropriate CIDR blocks.
+   - **Subnets**: Create public and private subnets for each tier.
+   - **Internet Gateway**: Attach the internet gateway to the VPC for external communication.
+   - **NAT Gateway**: Set up NAT Gateway for private subnets to access the internet.
+   - **Route Tables**: Configure route tables to control traffic flow.
+   - **Security Groups**: Set up security groups to allow specific traffic (HTTP, SSH, etc.).
+   - **EC2 Instances**: Launch EC2 instances in the appropriate subnets for Web and Application Tiers.
+   - **RDS Instance**: Set up an RDS instance for the Database Tier.
 
-1. **Launch Template:**
-   - In the EC2 dashboard, go to "Launch Templates."
-   - Create a new launch template:
-     - Name it (e.g., `WebTierTemplate`).
-     - Select Amazon Linux as the AMI.
-     - Choose `t2.micro` as the instance type.
-     - Create a new key pair or use an existing one.
-     - Configure network settings:
-       - Create a security group allowing SSH (port 22) and HTTP (port 80) from any IP.
-       - Enable "Auto-assign public IP."
-     - In "Advanced Details," add user data to install and start the Apache web server.
+3. **Configure Load Balancer:**
 
-2. **Launch Web Tier EC2 Instances:**
-   - Navigate to the EC2 dashboard and click "Instances" > "Launch Instance."
-   - Choose "Launch Instance from Template."
-   - Select the previously created `WebTierTemplate`.
-   - Choose the public subnets for the Web Tier.
-   - Launch two EC2 instances for high availability.
-   - Ensure the security group allows HTTP (port 80) and SSH (port 22) access from anywhere.
-   - Once the instances are launched, confirm they are accessible by visiting their public IPs in a web browser.
+   Set up an **Elastic Load Balancer (ELB)** to distribute traffic to your EC2 instances in the Web Tier.
 
-### Application Tier
+4. **Auto Scaling:**
 
-1. **Launch Template for Application Tier:**
-   - In the EC2 dashboard, go to "Launch Templates."
-   - Create a new launch template:
-     - Name it (e.g., `AppTierTemplate`).
-     - Select Amazon Linux or another AMI.
-     - Choose `t2.micro` or an appropriate instance type based on your needs.
-     - Create a new key pair or use an existing one.
-     - Configure network settings:
-       - Create a security group allowing only HTTP (port 80) or custom application ports.
-       - Associate the template with the private subnets for the Application Tier.
-     - Configure advanced settings as needed.
-     - Launch instances within the private subnets.
+   Configure **Auto Scaling** for EC2 instances to automatically scale based on traffic load.
 
-2. **Launch Application Tier EC2 Instances:**
-   - Launch at least two EC2 instances in the private subnets for the Application Tier.
-   - Verify that these instances are not publicly accessible, and only the Web Tier can communicate with them.
+5. **Access the Web App:**
 
-### Database Tier
+   Once the resources are provisioned, you can access your web app via the public IP or the load balancer's DNS name.
 
-1. **Launch RDS Instance:**
-   - In the RDS dashboard, click "Create Database."
-   - Choose a database engine (e.g., MySQL, PostgreSQL).
-   - Select the instance type (e.g., `db.t2.micro`).
-   - Select your private subnets for the Database Tier.
-   - Configure the database settings (e.g., database name, master username, password).
-   - Ensure the security group allows inbound access only from the Application Tier.
-   - Launch the RDS instance and wait for it to become available.
+---
 
-2. **Configure Security Groups:**
-   - For the Web Tier, ensure the security group allows inbound HTTP (port 80) and SSH (port 22).
-   - For the Application Tier, configure security groups to allow traffic from the Web Tier (port 80 or custom application port).
-   - For the Database Tier, configure security groups to allow traffic from the Application Tier.
+## Detailed AWS Service Usage
 
-## Verifying Connectivity
+### **VPC (Virtual Private Cloud)**
 
-1. **Test Web Tier:**
-   - Once the EC2 instances for the Web Tier are launched, verify that you can access the web application by entering the public IP address in a browser.
-   - You should see the Apache web server default page or your custom application.
+The VPC provides the network infrastructure for your application, and is divided into public and private subnets. 
 
-2. **Test Application Tier:**
-   - Use SSH to connect to one of the EC2 instances in the Application Tier (private subnet).
-   - Verify that the application is running and can connect to the database.
+- **Public Subnets**: Used for resources that need to be accessible from the internet (e.g., Web Tier EC2 instances, Load Balancer).
+- **Private Subnets**: Used for backend resources that should not be directly accessible from the internet (e.g., Application Tier EC2 instances, RDS databases).
+  
+### **Security Groups**
 
-3. **Test Database Connectivity:**
-   - Connect to the RDS instance from one of the Application Tier instances.
-   - Ensure the database is accessible and that the application can query the database as needed.
+Security Groups are configured to control access to EC2 instances:
 
-4. **Test Full Connectivity:**
-   - Ensure that the Web Tier can communicate with the Application Tier, and the Application Tier can connect to the Database Tier.
-   - Test the overall flow of the application from the web interface down to the database.
+- **Web Tier**: Allow HTTP (port 80) and HTTPS (port 443) traffic.
+- **Application Tier**: Allow only internal traffic from the Web Tier on specific ports.
+- **Database Tier**: Allow access only from the Application Tier.
 
-## Conclusion
+### **Elastic Load Balancer (ELB)**
 
-You have successfully set up a 3-tier architecture on AWS, with a Web Tier, Application Tier, and Database Tier. This architecture ensures scalability, high availability, and security by isolating each tier in different subnets and utilizing best practices for routing and security. 
+The ELB balances incoming traffic to EC2 instances in the **Web Tier**. This ensures high availability and fault tolerance for the front-end application. The Load Balancer is set up in the public subnet and routes traffic to the EC2 instances in private subnets for security.
 
-For continuous improvement, consider adding features like Auto Scaling, Load Balancers, and Multi-AZ deployments to further enhance the resilience and performance of your infrastructure.
+### **Auto Scaling**
+
+The EC2 Auto Scaling group ensures that the number of EC2 instances in the Web and Application tiers can automatically scale up or down based on traffic patterns. The Auto Scaling policy is set up to maintain a minimum, maximum, and desired number of instances.
+
+### **RDS (Relational Database Service)**
+
+The RDS instance is provisioned in the private subnet to manage relational data for the app. It communicates with the **Application Tier** to store and retrieve data. RDS provides features such as automatic backups, patch management, and scaling.
+
+### **Route Tables and NAT Gateway**
+
+- **Route Tables**: Control the flow of traffic within the VPC and between subnets.
+- **NAT Gateway**: Ensures that instances in private subnets can access the internet for necessary updates and downloads while keeping the instances secure.
+
+---
+
+## Additional Features
+
+- **Auto Scaling**: The architecture is designed to handle auto-scaling for EC2 instances based on traffic load.
+- **Load Balancer**: Using **Elastic Load Balancing (ELB)** to distribute traffic between multiple EC2 instances.
+- **High Availability**: The infrastructure is designed across multiple availability zones for redundancy.
+- **NAT Gateway**: Provides secure internet access for instances in private subnets.
+
+---
+
+## Future Enhancements
+
+- **CloudWatch Monitoring**: Implement monitoring and logging for better observability.
+- **CI/CD Pipeline**: Set up continuous integration and deployment pipelines for automating the deployment process.
+- **Serverless Option**: Explore migrating to a fully serverless architecture using AWS Lambda.
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
 
  
