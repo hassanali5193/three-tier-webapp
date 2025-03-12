@@ -14,12 +14,6 @@ This repository demonstrates the setup of a **3-tier architecture** for a **web 
 
 - **AWS** (EC2, RDS, VPC, Load Balancer, Auto Scaling, Security Groups, Subnets, NAT Gateway)
 
-
-## Diagram
-
-![AWS 3-Tier Architecture] 
-(https://github.com/user-attachments/assets/092ebdb7-a632-4303-b956-ff9866c7e79d)
-
 ## Architecture Overview
 
 ### Web Tier
